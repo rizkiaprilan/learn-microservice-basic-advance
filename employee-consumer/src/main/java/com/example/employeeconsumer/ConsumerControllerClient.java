@@ -2,20 +2,20 @@ package com.example.employeeconsumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 public class ConsumerControllerClient {
 
     @Autowired
-    private DiscoveryClient discoveryClient;
+    private LoadBalancerClient loadBalancer;
 
     private static HttpEntity<?> getHeaders() throws IOException {
         HttpHeaders headers = new HttpHeaders();
@@ -25,10 +25,10 @@ public class ConsumerControllerClient {
 
     public void getEmployee() throws RestClientException, IOException {
 
-        List<ServiceInstance> instances = discoveryClient.getInstances("employee-producer");
-        ServiceInstance serviceInstance = instances.get(0);
+        ServiceInstance serviceInstance = loadBalancer.choose("employee-producer");
 
         String baseUrl = serviceInstance.getUri().toString();
+        System.out.println("Baseurl: " + baseUrl);
 
         baseUrl = baseUrl + "/employee";
         RestTemplate restTemplate = new RestTemplate();
