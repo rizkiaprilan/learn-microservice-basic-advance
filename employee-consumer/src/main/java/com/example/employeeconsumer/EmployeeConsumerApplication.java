@@ -4,12 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestClientException;
 
 @EnableDiscoveryClient
 @SpringBootApplication
+@EnableFeignClients
 @RibbonClient(name = "employee-producer")
 public class EmployeeConsumerApplication {
 
@@ -18,9 +20,7 @@ public class EmployeeConsumerApplication {
 
         ConsumerControllerClient ctxBean = ctx.getBean(ConsumerControllerClient.class);
         System.out.println(ctxBean);
-
-        for (int i = 0; i < 100; i++)
-            ctxBean.getEmployee();
+        ctxBean.getEmployee();
     }
 
     @Bean
