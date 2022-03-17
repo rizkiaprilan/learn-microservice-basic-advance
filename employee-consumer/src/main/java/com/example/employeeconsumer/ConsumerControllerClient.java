@@ -1,33 +1,38 @@
 package com.example.employeeconsumer;
 
+import com.netflix.appinfo.InstanceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class ConsumerControllerClient {
 
     @Autowired
-    private LoadBalancerClient loadBalancer;
+    private LoadBalancerClient loadBalancerClient;
 
-    private static HttpEntity<?> getHeaders() throws IOException {
+    @Autowired
+    private DiscoveryClient discoveryClient;
+
+    private static HttpEntity<?> getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
         return new HttpEntity<>(headers);
     }
 
-    public void getEmployee() throws RestClientException, IOException {
+    public void getEmployee() throws RestClientException {
+        ServiceInstance serviceInstance;
+        // using load balancer
+        serviceInstance = loadBalancerClient.choose("employee-producer");
 
-        ServiceInstance serviceInstance = loadBalancer.choose("employee-producer");
-
-        String baseUrl = serviceInstance.getUri().toString();
+         String baseUrl = serviceInstance.getUri().toString();
         System.out.println("Baseurl: " + baseUrl);
 
         baseUrl = baseUrl + "/employee";
