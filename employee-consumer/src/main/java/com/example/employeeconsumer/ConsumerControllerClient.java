@@ -1,6 +1,5 @@
 package com.example.employeeconsumer;
 
-import com.netflix.appinfo.InstanceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -9,8 +8,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 @Controller
 public class ConsumerControllerClient {
@@ -28,11 +25,10 @@ public class ConsumerControllerClient {
     }
 
     public void getEmployee() throws RestClientException {
-        ServiceInstance serviceInstance;
-        // using load balancer
-        serviceInstance = loadBalancerClient.choose("employee-producer");
 
-         String baseUrl = serviceInstance.getUri().toString();
+        ServiceInstance serviceInstance = loadBalancerClient.choose("employee-producer");
+
+        String baseUrl = serviceInstance.getUri().toString();
         System.out.println("Baseurl: " + baseUrl);
 
         baseUrl = baseUrl + "/employee";

@@ -11,6 +11,7 @@ public class TestController {
     @RequestMapping(value = "/employee", method = RequestMethod.GET)
     @HystrixCommand(fallbackMethod = "getDataFallBack")
     public Employee firstPage() {
+        System.out.println("Inside firstPage");
 
         Employee emp = new Employee();
         emp.setName("emp1");
@@ -25,6 +26,7 @@ public class TestController {
     }
 
     public Employee getDataFallBack() {
+        System.out.println("Inside fallback");
 
         Employee emp = new Employee();
         emp.setName("fallback-emp1");
