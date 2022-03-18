@@ -26,7 +26,7 @@ public class ConsumerControllerClient {
 
         String baseUrl = serviceInstance.getUri().toString();
 
-        baseUrl = baseUrl + "/producer/employee";
+        baseUrl = baseUrl + "/api/producer/employee";
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = null;
