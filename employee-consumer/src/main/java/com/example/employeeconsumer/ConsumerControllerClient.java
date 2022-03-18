@@ -21,7 +21,7 @@ public class ConsumerControllerClient {
     private DiscoveryClient discoveryClient;
 
     public void getEmployee() throws RestClientException {
-        List<ServiceInstance> instances = discoveryClient.getInstances("EMPLOYEE-ZUUL-SERVICE");
+        List<ServiceInstance> instances = discoveryClient.getInstances("employee-zuul-service");
         ServiceInstance serviceInstance = instances.get(0);
 
         String baseUrl = serviceInstance.getUri().toString();
