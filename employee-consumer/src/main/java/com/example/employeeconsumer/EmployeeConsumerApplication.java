@@ -5,10 +5,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestClientException;
 
+@EnableBinding(Sink.class)
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableFeignClients
@@ -26,6 +30,11 @@ public class EmployeeConsumerApplication {
     @Bean
     public ConsumerControllerClient consumerControllerClient() {
         return new ConsumerControllerClient();
+    }
+
+    @StreamListener(target = Sink.INPUT)
+    public void processRegisterEmployees(String employee) {
+        System.out.println("Employees Registered by Client " + employee);
     }
 
 }
