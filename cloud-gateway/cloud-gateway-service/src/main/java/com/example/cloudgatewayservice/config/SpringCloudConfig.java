@@ -26,14 +26,14 @@ public class SpringCloudConfig {
                 .build();
     }
 
-//    @Bean
-//    public GlobalFilter globalFilter() {
-//        return (exchange, chain) -> {
-//            System.out.println("First Global filter");
-//            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-//                System.out.println("Second Global filter");
-//            }));
-//        };
-//    }
+    @Bean
+    public GlobalFilter globalFilter() {
+        return (exchange, chain) -> {
+            System.out.println("First Global filter");
+            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+                System.out.println("Second Global filter");
+            }));
+        };
+    }
 
 }
