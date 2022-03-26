@@ -1,20 +1,22 @@
 server:
   port: 8080
 spring:
+  application:
+    name: gateway-service
   cloud:
     gateway:
       routes:
         - id: employeeModule
-          uri: http://localhost:8081/
+          uri: lb://FIRST-SERVICE
           predicates:
             - Path=/employee/**
-#          filters:
-#            - CustomFilter
         - id: consumerModule
-          uri: http://localhost:8082/
+          uri: lb://SECOND-SERVICE
           predicates:
             - Path=/consumer/**
-#          filters:
-#            - CustomFilter
       default-filters:
         - name: CustomFilter
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8083/eureka
