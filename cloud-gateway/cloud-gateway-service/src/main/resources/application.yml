@@ -10,10 +10,22 @@ spring:
           uri: lb://FIRST-SERVICE
           predicates:
             - Path=/employee/**
+#          filters:
+#            - CustomFilter
+#            - name: Hystrix
+#              args:
+#                name: fallbackCommand
+#                fallbackUri: forward:/fallback/message
         - id: consumerModule
           uri: lb://SECOND-SERVICE
           predicates:
             - Path=/consumer/**
+#          filters:
+#            - CustomFilter
+#            - name: Hystrix
+#              args:
+#                name: fallbackCommand
+#                fallbackUri: forward:/fallback/message
       default-filters:
         - name: CustomFilter
 eureka:

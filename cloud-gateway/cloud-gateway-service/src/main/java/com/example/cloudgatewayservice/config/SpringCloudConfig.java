@@ -16,13 +16,15 @@ public class SpringCloudConfig {
                 .route(r -> r.path("/employee/**")
                         //Pre and Post Filters provided by Spring Cloud Gateway
                         .filters(f -> f.addRequestHeader("first-request", "first-request-header")
-                                .addResponseHeader("first-response", "first-response-header"))
-                        .uri("http://localhost:8081/"))
+                                .addResponseHeader("first-response", "first-response-header")
+                                .circuitBreaker(config -> config.setName("first-hystrix").setFallbackUri("forward:/fallback/message")))
+                        .uri("lb://FIRST-SERVICE"))
                 .route(r -> r.path("/consumer/**")
                         //Pre and Post Filters provided by Spring Cloud Gateway
                         .filters(f -> f.addRequestHeader("second-request", "second-request-header")
-                                .addResponseHeader("second-response", "second-response-header"))
-                        .uri("http://localhost:8082/"))
+                                .addResponseHeader("second-response", "second-response-header")
+                                .circuitBreaker(config -> config.setName("second-hystrix").setFallbackUri("forward:/fallback/message")))
+                        .uri("lb://SECOND-SERVICE"))
                 .build();
     }
 
